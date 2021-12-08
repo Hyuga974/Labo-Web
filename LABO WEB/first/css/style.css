@@ -1,0 +1,34 @@
+body{ 
+    background-color:aqua
+}
+
+h2 {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: rgba(19, 100, 50, 0.384);;
+}
+
+a{
+    color: black
+}
+
+img:hover{
+    transform:rotate(180deg) translateX(180px)
+}
+
+video{
+    transform:scale(0.5);
+    align-items:left;
+}
+
+#chap_3{
+    color : blue;
+
+}
+
+
+.sommaire{
+    list-style-position: inside;
+    text-align:center;
+    background : rgb(57, 128, 196);
+    max-width: 25%;
+}

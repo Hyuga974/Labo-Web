@@ -1,0 +1,8 @@
+body{
+    text-align : center;
+    min-height: 100%;
+}
+
+#meteo{
+    align-self: flex-end;
+}

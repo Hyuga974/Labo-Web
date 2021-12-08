@@ -1,0 +1,8 @@
+html {
+    color:#fff;
+    background-color: darkblue;
+}
+
+#meteo{
+    flex-direction: column;
+}
