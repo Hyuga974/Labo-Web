@@ -56,8 +56,9 @@
                         $users=$results->fetchAll(mode:PDO::FETCH_ASSOC);
                         
                         foreach ($users as $user){
-                            if ($user['userName'] == $_POST['name']){  
-                                if ($user['passWord'] == md5($_POST['pw'])){
+                            if ($user['userName'] == $_POST['name']){
+                                echo $user['passWord']."-----".password_hash($pw,PASSWORD_BCRYPT);
+                                if (password_verify($_POST['pw'],$user['passWord'] )){
                                     $_SESSION['name']=$user['userName'];
                                     $_SESSION['admin']=$user['admin'];
                                     $_SESSION['id']=$user['id'];

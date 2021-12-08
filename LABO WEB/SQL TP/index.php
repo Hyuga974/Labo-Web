@@ -71,6 +71,19 @@ try{
                     $queryString = "DELETE FROM todolist WHERE id=".$_POST['delete'];
                     $query = $pdo->prepare($queryString);
                     $query->execute();
+                }else if($_POST['text']){
+                    echo"Oui";
+                    foreach($todoList as $todo){
+                        $modif=$_POST['text'];
+                        echo $modif;
+                        echo $_POST['send'];
+                        if ($modif != $todo['content']){
+                            $queryString = "UPDATE  todolist SET content=".$modif. " WHERE id=".$_POST['send'];
+                            $query = $pdo->prepare($queryString);
+                            $query->execute();
+                        }
+                    
+                    }
                 }else if($_SESSION['admin']){
                     foreach($todoList as $todo){
                         $check=($_POST["todo_".$todo['id']]==''?0:1);
@@ -119,6 +132,9 @@ try{
                                     <?=$todo['content']?>
                                     
                                     <button name="delete" value="<?=$todo['id']?>" onClick="submit();" >DELETE</button>
+                                    <input type= button id="edit" name="edit" onClick=newEdit() value="EDIT"/>
+                                    <input id="text" name="text" type="text" placeholder=<?=$todo['content']?> style="border:none;display:none">
+                                    <button id="send" name="send" value="<?=$todo['id']?>"  onClick="submit()"   style="display:none" >SEND</button>
                                 </label>
                             </div>
                         <?php
@@ -215,6 +231,19 @@ try{
             <?php }
         ?>
     </div>
+    <script>
+
+        function newEdit(){
+            console.log("here"); 
+            let btn = document.getElementById("edit");
+            let text = document.getElementById("text");
+            let send = document.getElementById("send");
+                send.style.display = "block";
+                text.style.display="block";
+        }
+    </script>
+    </form>
     
+
 </body>
 </html>

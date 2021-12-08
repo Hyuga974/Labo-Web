@@ -104,7 +104,7 @@
                         
                         $data = [
                             'userName' => $name,
-                            'passWord' => md5($pw),
+                            'passWord' => password_hash($pw,PASSWORD_BCRYPT),
                             'admin' => (bool) $admin
                         ];
 
