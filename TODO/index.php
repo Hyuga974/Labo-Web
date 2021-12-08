@@ -43,7 +43,6 @@ try{
     <form method="post" action="">
         
         <?php
-
             if ($_SESSION['name'] != ''){
                 $query = 'SELECT * FROM todolist';
                 $results = $pdo->prepare($query);
@@ -71,19 +70,7 @@ try{
                     $queryString = "DELETE FROM todolist WHERE id=".$_POST['delete'];
                     $query = $pdo->prepare($queryString);
                     $query->execute();
-                }else if($_POST['text']){
-                    echo"Oui";
-                    foreach($todoList as $todo){
-                        $modif=$_POST['text'];
-                        echo $modif;
-                        echo $_POST['send'];
-                        if ($modif != $todo['content']){
-                            $queryString = "UPDATE  todolist SET content=".$modif. " WHERE id=".$_POST['send'];
-                            $query = $pdo->prepare($queryString);
-                            $query->execute();
-                        }
-                    
-                    }
+                
                 }else if($_SESSION['admin']){
                     foreach($todoList as $todo){
                         $check=($_POST["todo_".$todo['id']]==''?0:1);
@@ -96,12 +83,28 @@ try{
                     }
                 }else {
                     foreach($todoList as $todo){
-                        $check=($_POST["todo_".$todo['id']]==''?0:1);
-                        if ($check != $todo['done']){
-                            $queryString = "UPDATE todolist SET done=".($todo['done']==1?0:1)." WHERE id=".$todo['id'];
-                            $query = $pdo->prepare($queryString);
-                            $query->execute();
+                        //print_r($_POST['edit_'.$todo['id']]."--------------");
+            
+                        if(isset($_POST['send_'.$todo['id']]) && isset($_POST['text_'.$todo['id']])){
+                            $modif=$_POST['text_'.$todo['id']];
+                            echo $modif;
+                            if($_POST['text_'.$todo['id']] != $todo['content']){
+                                $queryString = 'UPDATE todolist SET content="'.$modif.'" WHERE id='.$todo['id'];
+                                var_dump($_POST['text_'.$todo['id']]);
+                                $query = $pdo->prepare($queryString);
+                                $query->execute();
+
+                            }
+                            
+                        }else{
+                            $check=($_POST["todo_".$todo['id']]==''?0:1);
+                            if ($check != $todo['done']){
+                                $queryString = "UPDATE todolist SET done=".($todo['done']==1?0:1)." WHERE id=".$todo['id'];
+                                $query = $pdo->prepare($queryString);
+                                $query->execute();
+                            }
                         }
+                        
                     
                     }
                 }?>
@@ -126,16 +129,15 @@ try{
                     foreach($todoList as $todo){
                         ?>
                             <div>
-                                <label for="">
                                     <input type="checkbox" onChange="submit();" name="todo_<?=$todo['id']?>"  <?php echo ($todo['done']==1 ? 'checked' : '');?>>
 
-                                    <?=$todo['content']?>
+                                    
+                                    <input type="text" id="text_<?=$todo['id']?>" name="text_<?=$todo['id']?>" value=<?=$todo['content']?> readonly>
                                     
                                     <button name="delete" value="<?=$todo['id']?>" onClick="submit();" >DELETE</button>
-                                    <input type= button id="edit" name="edit" onClick=newEdit() value="EDIT"/>
-                                    <input id="text" name="text" type="text" placeholder=<?=$todo['content']?> style="border:none;display:none">
-                                    <button id="send" name="send" value="<?=$todo['id']?>"  onClick="submit()"   style="display:none" >SEND</button>
-                                </label>
+                                    <button type="button" name="edit_"+<?=$todo['id']?> id="edit_<?=$todo['id']?>" me=<?=$todo['id']?>  onClick=newEdit(<?=$todo['id']?>) value="<?=$todo['id']?>">Edit</button>
+                                    
+                                    <button id="send_<?=$todo['id']?>" name="send_<?=$todo['id']?>" value="<?=$todo['id']?>" onClick="submit()"   style="display:none">SEND </button>
                             </div>
                         <?php
                     }
@@ -233,13 +235,14 @@ try{
     </div>
     <script>
 
-        function newEdit(){
+        function newEdit(id){
             console.log("here"); 
-            let btn = document.getElementById("edit");
-            let text = document.getElementById("text");
-            let send = document.getElementById("send");
-                send.style.display = "block";
-                text.style.display="block";
+            let test = document.getElementById("edit_"+id);
+            console.log("text_"+test.getAttribute("me"));
+            let text = document.getElementById("text_"+test.getAttribute("me"));
+            let send = document.getElementById("send_"+test.getAttribute("me"));
+            send.style.display = "block";
+            text.removeAttribute("readonly");
         }
     </script>
     </form>

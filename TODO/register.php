@@ -115,7 +115,7 @@
                         $queryString = "SELECT * FROM user ORDER BY id DESC LIMIT 1";
                         $query = $pdo->prepare($queryString);
                         $query->execute();
-                        $user=$query->fetchALl();
+                        $user=$query->fetchAll();
 
                         var_dump(count($user));
                         foreach($user as $u){
